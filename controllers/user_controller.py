@@ -31,8 +31,11 @@ def login():
 @user_bp.route('/', methods=['GET'])
 @jwt_required()
 def get_users():
-    users = UserService.get_all_users()
-    return jsonify([{'id': u.id, 'username': u.username} for u in users])
+    try:
+        users = UserService.get_all_users()
+        return jsonify([{'id': u.id, 'username': u.username} for u in users]), 200
+    except Exception as e:
+        return jsonify({'error': 'No autenticado', 'msg': str(e)}), 401
 
 """
 Para crear más controladores:
