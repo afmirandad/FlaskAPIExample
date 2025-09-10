@@ -1,3 +1,9 @@
+## Despliegue en Railway
+1. Sube el repositorio a GitHub.
+2. Ve a https://railway.app y crea un nuevo proyecto.
+3. Conecta tu repositorio y selecciona los archivos generados (`Procfile`, `runtime.txt`, `Dockerfile`).
+4. Configura las variables de entorno en Railway (`DATABASE_URL`, `JWT_SECRET_KEY`).
+5. Railway instalará las dependencias y ejecutará el comando del `Procfile` automáticamente.
 # FlaskAPIExample
 
 ## Descripción
