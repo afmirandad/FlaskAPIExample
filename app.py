@@ -23,6 +23,20 @@ jwt = JWTManager(app)
 # Inicializar db con la app
 db.init_app(app)
 
+
+# Endpoint raíz para información de la API
+@app.route('/')
+def index():
+    return {
+        "api": "FlaskAPIExample",
+        "status": "OK",
+        "endpoints": [
+            "/users/register",
+            "/users/login",
+            "/users/ (GET, requiere JWT)"
+        ]
+    }, 200
+
 # Registrar blueprints de controladores
 app.register_blueprint(user_bp)
 
