@@ -24,7 +24,7 @@ app = Flask(__name__)
 
 # Configuración de la base de datos y JWT desde .env
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///flaskapi.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('MYSQL_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'tu_clave_secreta_jwt')
 jwt = JWTManager(app)
