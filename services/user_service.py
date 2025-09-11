@@ -16,6 +16,11 @@ class UserService:
     def register_user(username, password):
         from models.db import db
         logger.info(f'Registrando usuario en servicio: {username}')
+        # Validar si el usuario ya existe
+        existing_user = UserRepository.get_by_username(username, db.session)
+        if existing_user:
+            logger.warning(f'Intento de registro con usuario existente: {username}')
+            return {'error': 'Usuario ya existe', 'username': username}
         hashed_password = generate_password_hash(password)
         user = UserRepository.create_user(username, hashed_password, db.session)
         logger.info(f'Usuario creado en servicio: {user.username} (ID: {user.id})')

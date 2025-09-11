@@ -57,6 +57,22 @@ def register():
             msg:
               type: string
               example: "username y password son requeridos"
+      409:
+        description: Usuario ya existe
+        schema:
+          type: object
+          properties:
+            msg:
+              type: string
+              example: "Usuario ya existe"
+      500:
+        description: Error interno al registrar
+        schema:
+          type: object
+          properties:
+            msg:
+              type: string
+              example: "No se pudo completar el registro"
     """
     data = request.get_json() or {}
     username = data.get('username')
@@ -64,10 +80,21 @@ def register():
     if not username or not password:
         return jsonify({"msg": "username y password son requeridos"}), 400
 
-    logger.info(f'Registrando usuario: {username}')
-    user = UserService.register_user(username, password)
-    logger.info(f'Usuario registrado: {user.username} (ID: {user.id})')
-    return jsonify({'id': user.id, 'username': user.username}), 201
+    try:
+        logger.info(f'Registrando usuario: {username}')
+        user = UserService.register_user(username, password)
+
+        # Soporta contrato donde el servicio devuelve dict de error
+        if isinstance(user, dict) and user.get('error') == 'Usuario ya existe':
+            logger.warning(f'Usuario ya existe: {username}')
+            return jsonify({'msg': 'Usuario ya existe'}), 409
+
+        logger.info(f'Usuario registrado: {user.username} (ID: {user.id})')
+        return jsonify({'id': user.id, 'username': user.username}), 201
+
+    except Exception as e:
+        logger.exception("Error en registro de usuario")
+        return jsonify({'msg': 'No se pudo completar el registro', 'detail': str(e)}), 500
 
 
 @user_bp.route('/login', methods=['POST'])
@@ -102,6 +129,14 @@ def login():
             access_token:
               type: string
               example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
+      400:
+        description: Petición inválida
+        schema:
+          type: object
+          properties:
+            msg:
+              type: string
+              example: "username y password son requeridos"
       401:
         description: Credenciales inválidas
         schema:
@@ -114,12 +149,16 @@ def login():
     data = request.get_json() or {}
     username = data.get('username')
     password = data.get('password')
+    if not username or not password:
+        return jsonify({"msg": "username y password son requeridos"}), 400
+
     logger.info(f'Intento de login para usuario: {username}')
     user = UserService.authenticate(username, password)
     if user:
         access_token = create_access_token(identity=str(user.id))  # identity debe ser string
         logger.info(f'Login exitoso para usuario: {username}')
         return jsonify({'access_token': access_token}), 200
+
     logger.warning(f'Login fallido para usuario: {username}')
     return jsonify({'msg': 'Credenciales inválidas'}), 401
 
