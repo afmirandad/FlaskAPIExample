@@ -30,11 +30,15 @@ def index():
     return {
         "api": "FlaskAPIExample",
         "status": "OK",
-        "endpoints": [
-            "/users/register",
-            "/users/login",
-            "/users/ (GET, requiere JWT)"
-        ]
+        "description": "API RESTful con Flask, SQLAlchemy, JWT y estructura modular.",
+        "author": "afmirandad",
+        "endpoints": {
+            "POST /users/register": "Registro de usuario",
+            "POST /users/login": "Login y obtención de JWT",
+            "GET /users/": "Listado de usuarios (requiere JWT)",
+            "GET /": "Información de la API"
+        },
+        "repository": "https://github.com/afmirandad/FlaskAPIExample"
     }, 200
 
 # Registrar blueprints de controladores
