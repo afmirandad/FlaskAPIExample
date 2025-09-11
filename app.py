@@ -24,7 +24,16 @@ logger = logging.getLogger(__name__)
 
 logger.info('Inicializando la aplicación Flask')
 app = Flask(__name__)
-swagger = Swagger(app)
+swagger_config = {
+    "swagger": "2.0",
+    "info": {
+        "title": "FlaskAPIExample",
+        "description": "API RESTful con Flask, SQLAlchemy, JWT y estructura modular.",
+        "version": "1.0.0"
+    },
+    "basePath": "/",
+}
+swagger = Swagger(app, config=swagger_config)
 
 
 # Configuración de la base de datos y JWT desde .env
