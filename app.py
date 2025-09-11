@@ -59,11 +59,18 @@ def index():
 app.register_blueprint(user_bp)
 logger.info('Blueprint de usuarios registrado')
 
+
+
+
+def create_tables_if_not_exist():
+    with app.app_context():
+        db.create_all()
+        logger.info('Tablas creadas en la base de datos (db.Model)')
+
+create_tables_if_not_exist()
+
 if __name__ == '__main__':
     logger.info('Ejecutando como script principal')
-    with app.app_context():
-        db.create_all()  # Crea las tablas si no existen
-        logger.info('Tablas creadas en la base de datos (si no existen)')
 
 """
 Para agregar más controladores, importa y registra el blueprint correspondiente:

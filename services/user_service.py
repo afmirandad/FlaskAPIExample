@@ -11,28 +11,34 @@ import logging
 logger = logging.getLogger(__name__)
 
 class UserService:
+
     @staticmethod
     def register_user(username, password):
+        from models.db import db
         logger.info(f'Registrando usuario en servicio: {username}')
         hashed_password = generate_password_hash(password)
-        user = UserRepository.create_user(username, hashed_password)
+        user = UserRepository.create_user(username, hashed_password, db.session)
         logger.info(f'Usuario creado en servicio: {user.username} (ID: {user.id})')
         return user
 
+
     @staticmethod
     def authenticate(username, password):
+        from models.db import db
         logger.info(f'Autenticando usuario en servicio: {username}')
-        user = UserRepository.get_by_username(username)
+        user = UserRepository.get_by_username(username, db.session)
         if user and check_password_hash(user.password, password):
             logger.info(f'Autenticación exitosa en servicio: {username}')
             return user
         logger.warning(f'Autenticación fallida en servicio: {username}')
         return None
 
+
     @staticmethod
     def get_all_users():
+        from models.db import db
         logger.info('Obteniendo todos los usuarios en servicio')
-        users = UserRepository.get_all()
+        users = UserRepository.get_all(db.session)
         logger.info(f'{len(users)} usuarios obtenidos en servicio')
         return users
 

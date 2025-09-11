@@ -5,3 +5,4 @@ pymysql
 werkzeug
 python-dotenv
 gunicorn
+sqlalchemy
