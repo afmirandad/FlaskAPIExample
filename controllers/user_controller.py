@@ -16,37 +16,37 @@ user_bp = Blueprint('user_bp', __name__, url_prefix='/users')
 
 @user_bp.route('/register', methods=['POST'])
 def register():
-            """
-            Registro de usuario
-            ---
-            tags:
-                - Usuarios
-            parameters:
-                - in: body
-                    name: body
-                    required: true
-                    schema:
-                        type: object
-                        properties:
-                            username:
-                                type: string
-                            password:
-                                type: string
-            responses:
-                201:
-                    description: Usuario registrado exitosamente
-                    examples:
-                        application/json:
-                            id: 1
-                            username: usuario1
-                    schema:
-                        type: object
-                        properties:
-                            id:
-                                type: integer
-                            username:
-                                type: string
-            """
+        """
+        Registro de usuario
+        ---
+        tags:
+            - Usuarios
+        parameters:
+            - in: body
+                name: body
+                required: true
+                schema:
+                    type: object
+                    properties:
+                        username:
+                            type: string
+                        password:
+                            type: string
+        responses:
+            201:
+                description: Usuario registrado exitosamente
+                examples:
+                    application/json:
+                        id: 1
+                        username: usuario1
+                schema:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                        username:
+                            type: string
+        """
         data = request.get_json()
         username = data.get('username')
         password = data.get('password')
@@ -58,44 +58,44 @@ def register():
 
 @user_bp.route('/login', methods=['POST'])
 def login():
-            """
-            Login de usuario
-            ---
-            tags:
-                - Usuarios
-            parameters:
-                - in: body
-                    name: body
-                    required: true
-                    schema:
-                        type: object
-                        properties:
-                            username:
-                                type: string
-                            password:
-                                type: string
-            responses:
-                200:
-                    description: Login exitoso y retorno de JWT
-                    examples:
-                        application/json:
-                            access_token: "<jwt_token>"
-                    schema:
-                        type: object
-                        properties:
-                            access_token:
-                                type: string
-                401:
-                    description: Credenciales inválidas
-                    examples:
-                        application/json:
-                            msg: "Credenciales inválidas"
-                    schema:
-                        type: object
-                        properties:
-                            msg:
-                                type: string
-            """
+        """
+        Login de usuario
+        ---
+        tags:
+            - Usuarios
+        parameters:
+            - in: body
+                name: body
+                required: true
+                schema:
+                    type: object
+                    properties:
+                        username:
+                            type: string
+                        password:
+                            type: string
+        responses:
+            200:
+                description: Login exitoso y retorno de JWT
+                examples:
+                    application/json:
+                        access_token: "<jwt_token>"
+                schema:
+                    type: object
+                    properties:
+                        access_token:
+                            type: string
+            401:
+                description: Credenciales inválidas
+                examples:
+                    application/json:
+                        msg: "Credenciales inválidas"
+                schema:
+                    type: object
+                    properties:
+                        msg:
+                            type: string
+        """
         data = request.get_json()
         username = data.get('username')
         password = data.get('password')
@@ -112,43 +112,43 @@ def login():
 @user_bp.route('/', methods=['GET'])
 @jwt_required()
 def get_users():
-            """
-            Listado de usuarios (requiere JWT)
-            ---
-            tags:
-                - Usuarios
-            security:
-                - Bearer: []
-            responses:
-                200:
-                    description: Listado de usuarios
-                    examples:
-                        application/json:
-                            - id: 1
-                                username: usuario1
-                    schema:
-                        type: array
-                        items:
-                            type: object
-                            properties:
-                                id:
-                                    type: integer
-                                username:
-                                    type: string
-                401:
-                    description: No autenticado
-                    examples:
-                        application/json:
-                            error: "No autenticado"
-                            msg: "Token inválido"
-                    schema:
+        """
+        Listado de usuarios (requiere JWT)
+        ---
+        tags:
+            - Usuarios
+        security:
+            - Bearer: []
+        responses:
+            200:
+                description: Listado de usuarios
+                examples:
+                    application/json:
+                        - id: 1
+                            username: usuario1
+                schema:
+                    type: array
+                    items:
                         type: object
                         properties:
-                            error:
+                            id:
+                                type: integer
+                            username:
                                 type: string
-                            msg:
-                                type: string
-            """
+            401:
+                description: No autenticado
+                examples:
+                    application/json:
+                        error: "No autenticado"
+                        msg: "Token inválido"
+                schema:
+                    type: object
+                    properties:
+                        error:
+                            type: string
+                        msg:
+                            type: string
+        """
         try:
                 logger.info('Consultando listado de usuarios')
                 users = UserService.get_all_users()
