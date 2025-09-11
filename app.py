@@ -8,20 +8,31 @@ from flask_jwt_extended import JWTManager
 from controllers.user_controller import user_bp
 from models.db import db
 import os
+import logging
 from dotenv import load_dotenv
+
 
 load_dotenv()
 
+# Configuración de logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
+logger = logging.getLogger(__name__)
+
+
+logger.info('Inicializando la aplicación Flask')
 app = Flask(__name__)
 
 # Configuración de la base de datos y JWT desde .env
+
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///flaskapi.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'tu_clave_secreta_jwt')
 jwt = JWTManager(app)
+logger.info(f"Conexión a la base de datos: {app.config['SQLALCHEMY_DATABASE_URI']}")
 
 # Inicializar db con la app
 db.init_app(app)
+logger.info('SQLAlchemy inicializado')
 
 
 # Endpoint raíz para información de la API
@@ -43,10 +54,13 @@ def index():
 
 # Registrar blueprints de controladores
 app.register_blueprint(user_bp)
+logger.info('Blueprint de usuarios registrado')
 
 if __name__ == '__main__':
+    logger.info('Ejecutando como script principal')
     with app.app_context():
         db.create_all()  # Crea las tablas si no existen
+        logger.info('Tablas creadas en la base de datos (si no existen)')
 
 """
 Para agregar más controladores, importa y registra el blueprint correspondiente:

@@ -2,7 +2,11 @@
 Modelo de usuario para SQLAlchemy.
 Puedes crear más modelos siguiendo este ejemplo y agregarlos en la carpeta models.
 """
+
 from models.db import db
+import logging
+
+logger = logging.getLogger(__name__)
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -11,6 +15,7 @@ class User(db.Model):
     password = db.Column(db.String(120), nullable=False)
 
     def __repr__(self):
+        logger.info(f'Representación de usuario solicitada: {self.username}')
         return f'<User {self.username}>'
 
 """
