@@ -22,9 +22,12 @@ logger = logging.getLogger(__name__)
 logger.info('Inicializando la aplicación Flask')
 app = Flask(__name__)
 
-# Configuración de la base de datos y JWT desde .env
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('MYSQL_URL')
+# Configuración de la base de datos y JWT desde .env
+db_url = os.getenv('MYSQL_URL')
+if db_url and db_url.startswith('mysql://'):
+    db_url = db_url.replace('mysql://', 'mysql+pymysql://', 1)
+app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'tu_clave_secreta_jwt')
 jwt = JWTManager(app)
