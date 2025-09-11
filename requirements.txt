@@ -6,3 +6,4 @@ werkzeug
 python-dotenv
 gunicorn
 sqlalchemy
+flasgger

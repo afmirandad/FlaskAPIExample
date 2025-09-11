@@ -7,9 +7,11 @@ from flask import Flask
 from flask_jwt_extended import JWTManager
 from controllers.user_controller import user_bp
 from models.db import db
+
 import os
 import logging
 from dotenv import load_dotenv
+from flasgger import Swagger
 
 
 load_dotenv()
@@ -19,8 +21,10 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(mess
 logger = logging.getLogger(__name__)
 
 
+
 logger.info('Inicializando la aplicación Flask')
 app = Flask(__name__)
+swagger = Swagger(app)
 
 
 # Configuración de la base de datos y JWT desde .env
