@@ -4,7 +4,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-class ElectrodomesticoRepository:
+class ElectrodomesticosRepository:
     @staticmethod
     def create(electrodomestico_data, session: Session):
         """
